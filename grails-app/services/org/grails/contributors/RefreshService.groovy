@@ -36,8 +36,8 @@ class RefreshService {
             def commitsCall = "commits/list/grails/grails-core/master"
             def commitsUrl = new URL(baseUrl + commitsCall)
             
-			def commitsResult = new XmlParser().parseText(commitsUrl.getText())
-			
+            def commitsResult = new XmlParser().parseText(commitsUrl.getText())
+            
             commitsResult.commit.each {commit ->
                 // (felipe)
                 // IMPORTANT: Commit#commitId is constrained as unique. I'm not checking whether
@@ -55,43 +55,43 @@ class RefreshService {
         }
     }
 
-    def contributors() {	
-		log.info("Contributors refresh method called")
-		
-		Refresh lastRefresh = Refresh.get(Refresh.count())
-		def today = new Date()
-		
-		if (lastRefresh?.dateCreated < today - 1) {
-			log.info("Contributors refresh being executed")
-			
-			def refresh = new Refresh()
-			def start = System.currentTimeMillis() 
-			
-			// MongoDB Plugin does not support executeUpdate like Hibernate
-			Contributor.list().each { c -> c.delete() }
-			//Contributor.executeUpdate("delete Contributor c")
-			
-			def config = ConfigurationHolder.config
-	        String baseUrl = config.github.url
-			String coreApiCall = "repos/show/grails/grails-core/contributors"
-			String docApiCall = "repos/show/grails/grails-doc/contributors"
-		
-			def coreUrl = new URL(baseUrl + coreApiCall)
-			def docUrl = new URL(baseUrl + docApiCall)
-			def coreResult = new XmlParser().parseText(coreUrl.getText())
-			def docResult = new XmlParser().parseText(docUrl.getText())
-		
-			coreResult.contributor.each {
-				new Contributor(repo: "core", login: it.login.text(), contributions: it.contributions.text()).save()
-			}
-		
-			docResult.contributor.each {
-				new Contributor(repo: "doc", login: it.login.text(), contributions: it.contributions.text()).save()
-			}
-			
-			def stop = System.currentTimeMillis()  
-			refresh.executionTime = stop - start
-			refresh.save()
-		}
+    def contributors() {    
+        log.info("Contributors refresh method called")
+        
+        Refresh lastRefresh = Refresh.get(Refresh.count())
+        def today = new Date()
+        
+        if (lastRefresh?.dateCreated < today - 1) {
+            log.info("Contributors refresh being executed")
+            
+            def refresh = new Refresh()
+            def start = System.currentTimeMillis() 
+            
+            // MongoDB Plugin does not support executeUpdate like Hibernate
+            Contributor.list().each { c -> c.delete() }
+            //Contributor.executeUpdate("delete Contributor c")
+            
+            def config = ConfigurationHolder.config
+            String baseUrl = config.github.url
+            String coreApiCall = "repos/show/grails/grails-core/contributors"
+            String docApiCall = "repos/show/grails/grails-doc/contributors"
+        
+            def coreUrl = new URL(baseUrl + coreApiCall)
+            def docUrl = new URL(baseUrl + docApiCall)
+            def coreResult = new XmlParser().parseText(coreUrl.getText())
+            def docResult = new XmlParser().parseText(docUrl.getText())
+        
+            coreResult.contributor.each {
+                new Contributor(repo: "core", login: it.login.text(), contributions: it.contributions.text()).save()
+            }
+        
+            docResult.contributor.each {
+                new Contributor(repo: "doc", login: it.login.text(), contributions: it.contributions.text()).save()
+            }
+            
+            def stop = System.currentTimeMillis()  
+            refresh.executionTime = stop - start
+            refresh.save()
+        }
     }
 }
