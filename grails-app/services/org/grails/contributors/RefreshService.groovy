@@ -38,7 +38,7 @@ class RefreshService {
             
 			def commitsResult = new XmlParser().parseText(commitsUrl.getText())
 			
-            commitsResult.commits.each {commit ->
+            commitsResult.commit.each {commit ->
                 // (felipe)
                 // IMPORTANT: Commit#commitId is constrained as unique. I'm not checking whether
                 // a given commit id is already present on DB. If a commit has already been
@@ -47,10 +47,10 @@ class RefreshService {
                 // whether it exists, and another one to persist it, we always try to persist,
                 // meaning one less DB operation. We should be careful and see if it's really
                 // being more "performatic".
-                new Commit(commitId: commit.id, url: commit.url,
-                        committerLogin: commit.committer.name,
-                        committerEmail: commit.committer.email,
-                        message: commit.message).save()
+                new Commit(commitId: commit.id.text(), url: commit.url.text(),
+                        committerLogin: commit.committer.name.text(),
+                        committerEmail: commit.committer.email.text(),
+                        message: commit.message.text()).save()
             }
         }
     }
@@ -81,12 +81,12 @@ class RefreshService {
 			def coreResult = new XmlParser().parseText(coreUrl.getText())
 			def docResult = new XmlParser().parseText(docUrl.getText())
 		
-			coreResult.contributors.each {
-				new Contributor(repo: "core", login: it.login, contributions: it.contributions).save()
+			coreResult.contributor.each {
+				new Contributor(repo: "core", login: it.login.text(), contributions: it.contributions.text()).save()
 			}
 		
-			docResult.contributors.each {
-				new Contributor(repo: "doc", login: it.login, contributions: it.contributions).save()
+			docResult.contributor.each {
+				new Contributor(repo: "doc", login: it.login.text(), contributions: it.contributions.text()).save()
 			}
 			
 			def stop = System.currentTimeMillis()  
