@@ -17,13 +17,13 @@
 package org.grails.contributors
 
 class HomeController {
-	def refreshService
-	
+    def refreshService
+    
     def index = {
-		refreshService.contributors()
-		
-		[coreContributors: Contributor.findAllByRepo("core"), docContributors: Contributor.findAllByRepo("doc")]
-	}
+        refreshService.contributors()
+        
+        [coreContributors: Contributor.findAllByRepo("core"), docContributors: Contributor.findAllByRepo("doc")]
+    }
 
     def commits = {
         refreshService.commits()
