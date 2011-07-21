@@ -1,7 +1,11 @@
 TODO list:
-- remove empty tests
+- remove empty tests - (DONE 07-21-11 bobby)
+- move to NoSQL (MongoDB?) - (DONE 07-21-11 bobby)
+
 - add tests for entities (spock plugin does not support groovy-1.8 yet, wait for grails-2.0-final?)
 - add tests for services (spock plugin does not support groovy-1.8 yet, wait for grails-2.0-final?)
 - implement "commits"
-- move to NoSQL (MongoDB?)
-- ...
+
+- rework layout, add new links for daily, weekly, monthly
+- quartz plugin to schedule data loads
+
