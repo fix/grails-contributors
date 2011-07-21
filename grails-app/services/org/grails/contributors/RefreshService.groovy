@@ -16,7 +16,7 @@
 
 package org.grails.contributors
 
-import groovy.json.JsonSlurper
+//import groovy.json.JsonSlurper
 import org.codehaus.groovy.grails.commons.*
 
 /**
@@ -35,8 +35,9 @@ class RefreshService {
             def baseUrl = ConfigurationHolder.config.github.url
             def commitsCall = "commits/list/grails/grails-core/master"
             def commitsUrl = new URL(baseUrl + commitsCall)
-            def commitsResult = new JsonSlurper().parseText(commitsUrl.getText())
-
+            
+			def commitsResult = new XmlParser().parseText(commitsUrl.getText())
+			
             commitsResult.commits.each {commit ->
                 // (felipe)
                 // IMPORTANT: Commit#commitId is constrained as unique. I'm not checking whether
@@ -66,7 +67,9 @@ class RefreshService {
 			def refresh = new Refresh()
 			def start = System.currentTimeMillis() 
 			
-			Contributor.executeUpdate("delete Contributor c")
+			// MongoDB Plugin does not support executeUpdate like Hibernate
+			Contributor.list().each { c -> c.delete() }
+			//Contributor.executeUpdate("delete Contributor c")
 			
 			def config = ConfigurationHolder.config
 	        String baseUrl = config.github.url
@@ -74,9 +77,9 @@ class RefreshService {
 			String docApiCall = "repos/show/grails/grails-doc/contributors"
 		
 			def coreUrl = new URL(baseUrl + coreApiCall)
-			def coreResult = new JsonSlurper().parseText(coreUrl.getText())
 			def docUrl = new URL(baseUrl + docApiCall)
-			def docResult = new JsonSlurper().parseText(docUrl.getText())
+			def coreResult = new XmlParser().parseText(coreUrl.getText())
+			def docResult = new XmlParser().parseText(docUrl.getText())
 		
 			coreResult.contributors.each {
 				new Contributor(repo: "core", login: it.login, contributions: it.contributions).save()

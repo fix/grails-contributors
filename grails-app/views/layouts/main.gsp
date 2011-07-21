@@ -7,6 +7,7 @@
 		<link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'main.css')}" type="text/css">
 		<g:layoutHead/>
+		<g:javascript library="application" />
 	</head>
 	<body>
 		<div id="wrapper">
@@ -18,6 +19,5 @@
 				Licensed under the terms of the Apache License, Version 2.0. Source code available on <a href="https://github.com/bobbywarner/grails-contributors" target="_blank">GitHub</a>.
 			</div>
 		</div>
-		<g:javascript library="application"/>
 	</body>
 </html>

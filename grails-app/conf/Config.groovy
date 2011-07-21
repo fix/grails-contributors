@@ -6,7 +6,7 @@
 //                             "file:${userHome}/.grails/${appName}-config.properties",
 //                             "file:${userHome}/.grails/${appName}-config.groovy"]
 
-// if (System.properties["${appName}.config.location"]) {
+// if(System.properties["${appName}.config.location"]) {
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
 // }
 
@@ -43,29 +43,30 @@ grails.scaffolding.templates.domainSuffix = 'Instance'
 grails.json.legacy.builder = false
 // enabled native2ascii conversion of i18n properties files
 grails.enable.native2ascii = true
+// whether to install the java.util.logging bridge for sl4j. Disable for AppEngine!
+grails.logging.jul.usebridge = true
 // packages to include in Spring bean scanning
 grails.spring.bean.packages = []
-// whether to disable processing of multi part requests
-grails.web.disable.multipart=false
 
 // request parameters to mask when logging exceptions
 grails.exceptionresolver.params.exclude = ['password']
 
 // set per-environment serverURL stem for creating absolute links
 environments {
-    development {
-        grails.logging.jul.usebridge = true
-    }
     production {
-        grails.logging.jul.usebridge = false
         grails.serverURL = "http://www.changeme.com"
     }
+    development {
+        grails.serverURL = "http://localhost:8080/${appName}"
+    }
+    test {
+        grails.serverURL = "http://localhost:8080/${appName}"
+    }
+
 }
 
 // log4j configuration
 log4j = {
-	info "grails.app"
-	
     // Example of changing the log pattern for the default console
     // appender:
     //
@@ -88,5 +89,4 @@ log4j = {
     warn   'org.mortbay.log'
 }
 
-
-github.url = 'http://github.com/api/v2/json/'
+github.url = 'http://github.com/api/v2/xml/'
