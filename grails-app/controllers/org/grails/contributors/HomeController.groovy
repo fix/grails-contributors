@@ -30,4 +30,8 @@ class HomeController {
         def allCommits = Commit.list(sort: "commitDate", order: "desc")
         [commits: allCommits]
     }
+	
+	def contributor = {
+		[contributor:Contributor.findByLogin(params.login)]
+	}
 }

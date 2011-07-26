@@ -10,7 +10,7 @@
 		<table>
 			<tbody>
 				<g:each var="c" in="${coreContributors}">
-				<tr><td># ${c.rank}</td><td><a target="_blank" href="https://github.com/${c.login}">${c.login}</a></td><td> ${c.contributions}</td></tr>
+				<tr><td># ${c.rank}</td><td><a target="_blank" href="${createLink(action:'contributor',params:[login:c.login])}">${c.login}</a></td><td> ${c.contributions}</td></tr>
 				</g:each>
 			</tbody>
 		</table>
@@ -20,7 +20,7 @@
 		<table>
 			<tbody>
 				<g:each var="c" in="${docContributors}">
-					<tr><td># ${c.rank}</td><td><a target="_blank" href="https://github.com/${c.login}">${c.login}</a></td><td> ${c.contributions}</td></tr>
+					<tr><td># ${c.rank}</td><td><a target="_blank" href="${createLink(action:'contributor',params:[login:c.login])}">${c.login}</a></td><td> ${c.contributions}</td></tr>
 				</g:each>
 			</tbody>
 		</table>

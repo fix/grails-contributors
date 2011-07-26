@@ -26,6 +26,9 @@ class Contributor {
     String company
     String name
     String blog
+	String gravatarId
+	
+	static hasMany=[commits:Commit]
 
     static constraints = {
         email(nullable: true, email: true)
@@ -33,5 +36,6 @@ class Contributor {
         company(nullable: true)
         name(nullable: true)
         blog(nullable: true)
+		gravatarId(nullable: true)
     }
 }

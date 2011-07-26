@@ -31,7 +31,8 @@ class RefreshService {
     def commits(){
         log.debug "ENTER RefreshService#commits"
 
-        if(Commit.count() == 0){
+        if(Commit.count()==0){
+			Commit.list().each { c -> c.delete() }
             def baseUrl = ConfigurationHolder.config.github.url
             def commitsCall = "commits/list/grails/grails-core/master"
             def commitsUrl = new URL(baseUrl + commitsCall)
@@ -47,10 +48,17 @@ class RefreshService {
                 // whether it exists, and another one to persist it, we always try to persist,
                 // meaning one less DB operation. We should be careful and see if it's really
                 // being more "performatic".
-                new Commit(commitId: commit.id.text(), url: commit.url.text(),
-                        committerLogin: commit.committer.name.text(),
-                        committerEmail: commit.committer.email.text(),
-                        message: commit.message.text()).save()
+				def login=commit.committer.login?.text()
+				if (!login || login.size()==0){
+					//try to guess login, based on graeme rocher case!
+					login=commit.committer.name?.text().toLowerCase().replace(" ", "")
+				}
+				println login
+                new Commit(commitId: commit.id.text(),
+					url: commit.url.text(),
+					contributor:Contributor.findByLogin(login),
+                    message: commit.message.text()
+					).save()
             }
         }
     }
@@ -62,6 +70,7 @@ class RefreshService {
         def today = new Date()
         
         if (lastRefresh?.dateCreated < today - 1) {
+			Commit.list().each { c -> c.delete() }
             log.info("Contributors refresh being executed")
             def refresh = new Refresh()
             def start = System.currentTimeMillis() 
@@ -81,12 +90,12 @@ class RefreshService {
             def docResult = new XmlParser().parseText(docUrl.getText())
 			int rank=1
             coreResult.contributor.each {
-                new Contributor(rank:rank++, repo: "core", login: it.login.text(), contributions: it.contributions.text()).save()
+                new Contributor(rank:rank++, blog: it.blog.text(), company: it.company.text(), repo: "core", name: it.name.text(), login: it.login.text(), contributions: it.contributions.text(), gravatarId:it."gravatar-id".text()).save()
             }
 			
 			rank=1
             docResult.contributor.each {
-                new Contributor(rank:rank++, repo: "doc", login: it.login.text(), contributions: it.contributions.text()).save()
+                new Contributor(rank:rank++, blog: it.blog.text(), company: it.company.text(), repo: "doc", name: it.name.text(), login: it.login.text(), contributions: it.contributions.text(), gravatarId:it."gravatar-id".text()).save()
             }
             
             def stop = System.currentTimeMillis()  
