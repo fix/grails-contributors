@@ -18,6 +18,7 @@ package org.grails.contributors
 
 class Contributor {
     String repo
+	Integer rank
     String login
     Integer contributions
     String email

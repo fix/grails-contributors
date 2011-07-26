@@ -63,7 +63,6 @@ class RefreshService {
         
         if (lastRefresh?.dateCreated < today - 1) {
             log.info("Contributors refresh being executed")
-            
             def refresh = new Refresh()
             def start = System.currentTimeMillis() 
             
@@ -80,13 +79,14 @@ class RefreshService {
             def docUrl = new URL(baseUrl + docApiCall)
             def coreResult = new XmlParser().parseText(coreUrl.getText())
             def docResult = new XmlParser().parseText(docUrl.getText())
-        
+			int rank=1
             coreResult.contributor.each {
-                new Contributor(repo: "core", login: it.login.text(), contributions: it.contributions.text()).save()
+                new Contributor(rank:rank++, repo: "core", login: it.login.text(), contributions: it.contributions.text()).save()
             }
-        
+			
+			rank=1
             docResult.contributor.each {
-                new Contributor(repo: "doc", login: it.login.text(), contributions: it.contributions.text()).save()
+                new Contributor(rank:rank++, repo: "doc", login: it.login.text(), contributions: it.contributions.text()).save()
             }
             
             def stop = System.currentTimeMillis()  

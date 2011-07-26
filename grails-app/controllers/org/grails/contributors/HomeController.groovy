@@ -22,7 +22,7 @@ class HomeController {
     def index = {
         refreshService.contributors()
         
-        [coreContributors: Contributor.findAllByRepo("core"), docContributors: Contributor.findAllByRepo("doc")]
+        [coreContributors: Contributor.findAllByRepo("core",[order:'asc', sort: 'rank']), docContributors: Contributor.findAllByRepo("doc",[order:'asc', sort: 'rank'])]
     }
 
     def commits = {
