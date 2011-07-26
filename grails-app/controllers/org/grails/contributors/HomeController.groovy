@@ -21,14 +21,13 @@ class HomeController {
     
     def index = {
         refreshService.contributors()
-        
-        [coreContributors: Contributor.findAllByRepo("core",[order:'asc', sort: 'rank']), docContributors: Contributor.findAllByRepo("doc",[order:'asc', sort: 'rank'])]
+        [coreContributions: Contribution.findAllByRepository('grails-core',[order:'asc', sort: 'rank']), docContributions: Contribution.findAllByRepository('grails-doc',[order:'asc', sort: 'rank'])]
     }
 
     def commits = {
         refreshService.commits()
-        def allCommits = Commit.list(sort: "commitDate", order: "desc")
-        [commits: allCommits]
+        def allCommits = Commit.findAllByRepository(params.repository,[sort: "commitDate", order: "desc"])
+        [repository: params.repository,commits: allCommits]
     }
 	
 	def contributor = {

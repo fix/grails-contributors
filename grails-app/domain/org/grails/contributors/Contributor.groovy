@@ -17,10 +17,7 @@
 package org.grails.contributors
 
 class Contributor {
-    String repo
-	Integer rank
     String login
-    Integer contributions
     String email
     String location
     String company
@@ -28,7 +25,7 @@ class Contributor {
     String blog
 	String gravatarId
 	
-	static hasMany=[commits:Commit]
+	static hasMany=[contributions:Contribution, commits:Commit]
 
     static constraints = {
         email(nullable: true, email: true)

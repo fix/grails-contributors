@@ -31,8 +31,7 @@ class RefreshService {
     def commits(){
         log.debug "ENTER RefreshService#commits"
 
-        if(Commit.count()==0){
-			Commit.list().each { c -> c.delete() }
+        if(Commit.findAllByRepository('grails-core').size()==0){
             def baseUrl = ConfigurationHolder.config.github.url
             def commitsCall = "commits/list/grails/grails-core/master"
             def commitsUrl = new URL(baseUrl + commitsCall)
@@ -54,13 +53,45 @@ class RefreshService {
 					login=commit.committer.name?.text().toLowerCase().replace(" ", "")
 				}
 				println login
+				Contributor.findByLogin(login).addToCommits(
                 new Commit(commitId: commit.id.text(),
 					url: commit.url.text(),
-					contributor:Contributor.findByLogin(login),
-                    message: commit.message.text()
-					).save()
+                    message: commit.message.text(),
+					repository:'grails-core'
+					)).save()
             }
         }
+		
+		if(Commit.findAllByRepository('grails-doc').size()==0){
+			def baseUrl = ConfigurationHolder.config.github.url
+			def commitsCall = "commits/list/grails/grails-doc/master"
+			def commitsUrl = new URL(baseUrl + commitsCall)
+			
+			def commitsResult = new XmlParser().parseText(commitsUrl.getText())
+			
+			commitsResult.commit.each {commit ->
+				// (felipe)
+				// IMPORTANT: Commit#commitId is constrained as unique. I'm not checking whether
+				// a given commit id is already present on DB. If a commit has already been
+				// persisted, no exception will be raised, and life goes on.
+				// I've done this to improve performance: instead of a DB operation to check
+				// whether it exists, and another one to persist it, we always try to persist,
+				// meaning one less DB operation. We should be careful and see if it's really
+				// being more "performatic".
+				def login=commit.committer.login?.text()
+				if (!login || login.size()==0){
+					//try to guess login, based on graeme rocher case!
+					login=commit.committer.name?.text().toLowerCase().replace(" ", "")
+				}
+				println login
+				Contributor.findByLogin(login).addToCommits(
+				new Commit(commitId: commit.id.text(),
+					url: commit.url.text(),
+					message: commit.message.text(),
+					repository:'grails-doc'
+					)).save()
+			}
+		}
     }
 
     def contributors() {    
@@ -71,6 +102,7 @@ class RefreshService {
         
         if (lastRefresh?.dateCreated < today - 1) {
 			Commit.list().each { c -> c.delete() }
+			Contribution.list().each { c -> c.delete() }
             log.info("Contributors refresh being executed")
             def refresh = new Refresh()
             def start = System.currentTimeMillis() 
@@ -90,12 +122,24 @@ class RefreshService {
             def docResult = new XmlParser().parseText(docUrl.getText())
 			int rank=1
             coreResult.contributor.each {
-                new Contributor(rank:rank++, blog: it.blog.text(), company: it.company.text(), repo: "core", name: it.name.text(), login: it.login.text(), contributions: it.contributions.text(), gravatarId:it."gravatar-id".text()).save()
+				def name=it.name.text()
+				if(name?.length()==0) name=it.login.text()
+				println name
+                def contributor= new Contributor(blog: it.blog.text(), company: it.company.text(), name: name, login: it.login.text(), gravatarId:it."gravatar-id".text())
+				contributor.addToContributions(new Contribution(rank:rank++, total: Integer.parseInt(it.contributions.text()), repository:'grails-core'))
+				contributor.save(failOnError:true)
             }
 			
 			rank=1
             docResult.contributor.each {
-                new Contributor(rank:rank++, blog: it.blog.text(), company: it.company.text(), repo: "doc", name: it.name.text(), login: it.login.text(), contributions: it.contributions.text(), gravatarId:it."gravatar-id".text()).save()
+				def contributor=Contributor.findByLogin(it.login.text())
+				if(!contributor){
+					def name=it.name.text()
+					if(name?.length()==0) name=it.login.text()
+					contributor= new Contributor(blog: it.blog.text(), company: it.company.text(), name: name, login: it.login.text(), gravatarId:it."gravatar-id".text())
+				}
+				contributor.addToContributions(new Contribution(rank:rank++, total: Integer.parseInt(it.contributions.text()), repository:'grails-doc'))
+				contributor.save(failOnError:true)
             }
             
             def stop = System.currentTimeMillis()  

@@ -1,4 +1,5 @@
 <!doctype html>
+<%@page import="org.grails.contributors.Contributor"%>
 <html>
 	<head>
 		<meta name="layout" content="main"/>
@@ -17,8 +18,9 @@
             <tbody>
                 <g:each var="c" in="${commits}" status="ctr">
                     <tr class="row${ctr%2}">
-                        <td>${c.commitId}</td>
-                        <td><a href="${createLink(action:'contributor', params:[login:c.contributor.login])}">${c.contributor.name? c.contributor.name:c.contributor.login}</a></td>
+                    	
+                        <td><a href="https://github.com/grails/${c.repository}/commit/${c.commitId}" target="_blank">${c.commitId.toString()[0..4]}..</a></td>
+                        <td><a href="${createLink(action:'contributor',params:[login:c.contributor.login])}">${c.contributor.name}</a></td>
                         <td><g:formatDate date="${c.dateCreated}" format="yyyy-MM-dd" /></td>
                         <td>${c.message}</td>
                     </tr>
