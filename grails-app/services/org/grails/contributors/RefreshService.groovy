@@ -125,7 +125,7 @@ class RefreshService {
 				def name=it.name.text()
 				if(name?.length()==0) name=it.login.text()
 				println name
-                def contributor= new Contributor(blog: it.blog.text(), company: it.company.text(), name: name, login: it.login.text(), gravatarId:it."gravatar-id".text())
+                def contributor= new Contributor(blog: it.blog.text(), location: it.location.text(), company: it.company.text(), name: name, login: it.login.text(), gravatarId:it."gravatar-id".text())
 				contributor.addToContributions(new Contribution(rank:rank++, total: Integer.parseInt(it.contributions.text()), repository:'grails-core'))
 				contributor.save(failOnError:true)
             }
@@ -136,7 +136,7 @@ class RefreshService {
 				if(!contributor){
 					def name=it.name.text()
 					if(name?.length()==0) name=it.login.text()
-					contributor= new Contributor(blog: it.blog.text(), company: it.company.text(), name: name, login: it.login.text(), gravatarId:it."gravatar-id".text())
+					contributor= new Contributor(blog: it.blog.text(), company: it.company.text(), location:it.location.text(), name: name, login: it.login.text(), gravatarId:it."gravatar-id".text())
 				}
 				contributor.addToContributions(new Contribution(rank:rank++, total: Integer.parseInt(it.contributions.text()), repository:'grails-doc'))
 				contributor.save(failOnError:true)
