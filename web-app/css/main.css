@@ -40,6 +40,7 @@ a {
 
 #header {
 	margin: 10px;
+	border-radius: 30px;
 	height: 130px;
 	box-shadow: 5px 5px 5px #888;
 	background-color: #aaffaa;
@@ -60,6 +61,7 @@ a {
 
 #leftCol {
 	width: 410px;
+	border-radius: 30px;
 	margin-right:10px;
 	padding: 10px;
 	background-color: #aaffaa;
@@ -69,6 +71,7 @@ a {
 
 #rightCol {
 	width: 410px;
+	border-radius: 30px;
 	margin-left:10px;
 	padding: 10px;
 	background-color: #aaffaa;
