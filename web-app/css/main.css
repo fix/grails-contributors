@@ -5,7 +5,7 @@
 }
 
 body {
-	background-color: #ccc;
+	background-color: #cac;
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 	font-size: 14px;
 }
@@ -20,6 +20,10 @@ ul {
 
 li {
 	padding: 0 0 5px 0;
+}
+
+a {
+	
 }
 
 #wrapper {
