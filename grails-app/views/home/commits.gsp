@@ -6,7 +6,7 @@
 	</head>
 	<body>
         <h1 class="center">All Commits</h1>
-        <table>
+        <table id="fullCol" cellpadding="10">
             <thead>
                 <tr>
                     <th>id</th>

@@ -84,23 +84,33 @@ a {
 }
 
 #leftCol {
-	width: 410px;
+	width: 45%;
 	border-radius: 30px;
-	margin-right:10px;
-	padding: 10px;
+	margin-right:1px;
+	padding: 15px;
 	background-color: #aaffaa;
 	box-shadow: 5px 5px 5px #888;
 	float: left;
+	font-size: 18px;
 }
 
 #rightCol {
-	width: 410px;
+	width: 45%;
 	border-radius: 30px;
-	margin-left:10px;
-	padding: 10px;
+	margin-left:1px;
+	padding: 15px;
 	background-color: #aaffaa;
 	box-shadow: 5px 5px 5px #888;
 	float: right;
+	font-size: 18px;
+}
+
+#fullCol{
+	width: 100%;
+	border-radius: 30px;
+	cellpadding:5;
+	padding: 15px;
+	background-color: #aaffaa;
 }
 
 #footer {
@@ -116,6 +126,7 @@ a {
 
 table {
     width: 100%;
+    border-spacing: 0;
 }
 
 table th{
@@ -124,11 +135,15 @@ table th{
 }
 
 table tr.row0{
-    background-color: #ece7e7;
+    background-color: #99ff99;
     text-align: left;
 }
 
+td {
+	padding:5px;
+}
+
 table tr.row1{
-    background-color: #ffffff;
+    background-color: #aaffaa;
     text-align: left;
 }
