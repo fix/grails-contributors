@@ -5,7 +5,8 @@
 		<meta name="layout" content="main"/>
 	</head>
 	<body>
-        <h1 class="center">All Commits</h1>
+        <h1 class="center">${params.repository}</h1>
+        <br/>
         <table id="fullCol" cellpadding="10">
             <thead>
                 <tr>
