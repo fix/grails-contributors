@@ -17,37 +17,37 @@
 package org.grails.contributors
 
 class HomeController {
-	def refreshService
+    def refreshService
 
-	def index = {
-		refreshService.contributors()
-		[coreContributions: Contribution.findAllByRepository('grails/grails-core',[order:'asc', sort: 'rank']), docContributions: Contribution.findAllByRepository('grails/grails-doc',[order:'asc', sort: 'rank'])]
-	}
+    def index = {
+        refreshService.contributors()
+        [coreContributions: Contribution.findAllByRepository('grails/grails-core',[order:'asc', sort: 'rank']), docContributions: Contribution.findAllByRepository('grails/grails-doc',[order:'asc', sort: 'rank'])]
+    }
 
-	def commits = {
-		refreshService.commits(params.repository)
-		def allCommits = Commit.findAllByRepository(params.repository,[sort: "commitDate", order: "desc"])
-		[repository: params.repository,commits: allCommits]
-	}
+    def commits = {
+        refreshService.commits(params.repository)
+        def allCommits = Commit.findAllByRepository(params.repository,[sort: "commitDate", order: "desc"])
+        [repository: params.repository,commits: allCommits]
+    }
 
-	def contributor = {
-		def contributor=Contributor.findByLogin(params.login)
-		def contribution
-		contributor.contributions.each{
-			if(it.compareTo(contribution)>0){
-				contribution=it
-			}
-		}
-		[contributor:contributor, bestContribution:contribution]
-	}
+    def contributor = {
+        def contributor=Contributor.findByLogin(params.login)
+        def contribution
+        contributor.contributions.each{
+            if(it.compareTo(contribution)>0){
+                contribution=it
+            }
+        }
+        [contributor:contributor, bestContribution:contribution]
+    }
 
-	def repository = {
-		if(!params.name){
-			[:]
-		}
-		else{
-			refreshService.contributors(params.name)
-			[contributions:Contribution.findAllByRepository(params.name,[order:'asc', sort: 'rank'])]
-		}
-	}
+    def repository = {
+        if(!params.name){
+            [:]
+        }
+        else{
+            refreshService.contributors(params.name)
+            [contributions:Contribution.findAllByRepository(params.name,[order:'asc', sort: 'rank'])]
+        }
+    }
 }

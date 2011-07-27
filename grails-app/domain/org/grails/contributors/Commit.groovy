@@ -1,5 +1,3 @@
-package org.grails.contributors
-
 /*
 * Copyright 2011 Bobby Warner
 *
@@ -15,6 +13,9 @@ package org.grails.contributors
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
+package org.grails.contributors
+
 class Commit {
     String commitId
 	String repository
