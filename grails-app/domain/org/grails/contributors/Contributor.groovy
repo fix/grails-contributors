@@ -17,15 +17,15 @@
 package org.grails.contributors
 
 class Contributor {
-    String repo
-	Integer rank
     String login
-    Integer contributions
     String email
     String location
     String company
     String name
     String blog
+	String gravatarId
+	
+	static hasMany=[contributions:Contribution, commits:Commit]
 
     static constraints = {
         email(nullable: true, email: true)
@@ -33,5 +33,6 @@ class Contributor {
         company(nullable: true)
         name(nullable: true)
         blog(nullable: true)
+		gravatarId(nullable: true)
     }
 }

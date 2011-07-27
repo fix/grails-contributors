@@ -14,7 +14,10 @@
 	<body>
 		<div id="wrapper">
 			<div id="header">
-				<a href="${createLink(controller:'home')}"><img id="logo" src="${resource(dir: 'images', file: 'logo.png')}" alt="Grails"/> <span style="color: #000000;">Grails</span>Contributors</a>
+			<a href="${createLink(controller:'home')}"><table>
+			<tr>
+				<td><img id="logo" src="${resource(dir: 'images', file: 'logo.png')}" alt="Grails"/></td><td><span style="color: #000000;">Grails</span>Contributors</td></tr></table></a>
+			
 			</div>
 			<div id="content">
 				<g:layoutBody/>
