@@ -9,7 +9,7 @@
   <div class="body">
   <table id="rounded-corner">
 	  <tr>
-	  	<td width="300px"><span id="image"><img src="http://www.gravatar.com/avatar/${contributor.gravatarId}?s=200" /><br/><br/>${contributor.login}</span></td>
+	  	<td style="vertical-align: top;" width="300px"><span id="image"><img src="http://www.gravatar.com/avatar/${contributor.gravatarId}?s=200" /><br/><br/>${contributor.login}</span></td>
 	  	<td style="text-align: left;vertical-align: bottom; font-size: 18px;">
 	  		<span id="fieldname">Login </span>${contributor.login}
 	  		<br/>
@@ -21,12 +21,20 @@
 	  		<br/>
 	  		<span id="fieldname">Blog </span><a href="${contributor.blog}">${contributor.blog}</a>
 	  		<br/>
-	  		<g:each var="c" in="${contributor.contributions}">
-	  			<h1 style="font-size: 34px; text-align:right;">${c.repository} #${c.rank} <span id="fieldname">(${c.total})</span></h1>
-	  		</g:each>
+	  		
+	  			<h1 style="font-size: 30px; text-align:right;">${bestContribution.repository.split("/")[1]} #${bestContribution.rank} <span id="fieldname">(${bestContribution.total})</span></h1>
+	  		
 	  		</td>
 	  		
 	  </tr>
+	  <tr><td colspan="2">
+	  <br/>
+	  <br/>
+	  <h2>All Contributions</h2>
+	  <g:each var="c" in="${contributor.contributions}">
+	  		<p>${c.repository} #${c.rank} <span id="fieldname">(${c.total})</span></p>
+	  </g:each>
+	  </td></tr>
   </table>
   
   </div>
