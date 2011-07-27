@@ -18,16 +18,17 @@ package org.grails.contributors
 
 class Commit {
     String commitId
-	String repository
+    String repository
     String url
     String message
     Date commitDate
     Date dateCreated
-	static belongsTo=[contributor:Contributor]
+    
+    static belongsTo = [contributor: Contributor]
 
     static constraints = {
         commitId(nullable: false, unique: true)
-		repository(nullable:true)
+        repository(nullable: true)
         url(nullable: false)
         message(size: 1..4000)
         // TODO: convert from "2010-12-09T13:50:17-08:00" to Date
