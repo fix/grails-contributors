@@ -31,7 +31,7 @@ class HomeController {
     }
 
     def repository = {
-        if(!params.name){
+        if(!params.name||!params.name.contains("grails")){
             [:]
         }
         else{
