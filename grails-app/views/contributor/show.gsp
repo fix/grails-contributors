@@ -32,7 +32,7 @@
 	  <br/>
 	  <h2>All Contributions</h2>
 	  <g:each var="c" in="${contributor.contributions}">
-	  		<p>${c.repository} #${c.rank} <span id="fieldname">(${c.total})</span></p>
+	  		<p><a href="${createLink(controller:'home', action:'repository', params:[name:c.repository])}">${c.repository} #${c.rank}</a> <span id="fieldname">(${c.total})</span></p>
 	  </g:each>
 	  </td></tr>
   </table>
