@@ -10,7 +10,15 @@
 		<table>
 			<tbody>
 				<g:each var="c" in="${coreContributions}">
-				<tr class="row${c.rank%2}"><td># ${c.rank}</td><td><a target="_blank" href="${createLink(action:'contributor',params:[login:c.contributor.login])}">${c.contributor.name}</a></td><td> ${c.total}</td></tr>
+				<tr class="row${c.rank%2}">
+					<td># ${c.rank}</td>
+					<td>
+						<a target="_blank" href="${createLink(controller: 'contributor', action: 'show', params: [login:c.contributor.login])}">
+							${c.contributor.name}
+						</a>
+					</td>
+					<td> ${c.total}</td>
+				</tr>
 				</g:each>
 			</tbody>
 		</table>
@@ -21,7 +29,15 @@
 		<table>
 			<tbody>
 				<g:each var="c" in="${docContributions}">
-					<tr class="row${c.rank%2}"><td>#${c.rank}</td><td><a target="_blank" href="${createLink(action:'contributor',params:[login:c.contributor.login])}">${c.contributor.name}</a></td><td> ${c.total}</td></tr>
+					<tr class="row${c.rank%2}">
+						<td>#${c.rank}</td>
+						<td>
+							<a target="_blank" href="${createLink(controller: 'contributor', action: 'show', params: [login: c.contributor.login])}">
+								${c.contributor.name}
+							</a>
+						</td>
+						<td> ${c.total}</td>
+					</tr>
 				</g:each>
 			</tbody>
 		</table>

@@ -6,6 +6,8 @@ class UrlMappings {
 				// apply constraints here
 			}
 		}
+		
+		"/$login"(controller:"contributor", action:"show")
 
 		"/"(controller:"home")
 		"500"(view:'/error')

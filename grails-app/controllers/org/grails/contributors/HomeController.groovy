@@ -30,17 +30,6 @@ class HomeController {
         [repository: params.repository,commits: allCommits]
     }
 
-    def contributor = {
-        def contributor=Contributor.findByLogin(params.login)
-        def contribution
-        contributor.contributions.each{
-            if(it.compareTo(contribution)>0){
-                contribution=it
-            }
-        }
-        [contributor:contributor, bestContribution:contribution]
-    }
-
     def repository = {
         if(!params.name){
             [:]
