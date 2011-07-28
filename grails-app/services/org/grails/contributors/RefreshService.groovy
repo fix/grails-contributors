@@ -87,49 +87,50 @@ class RefreshService {
 
     def contributors(String repository) {
         log.info("Contributors refresh method called")
-        Refresh lastRefresh = Refresh.get(Refresh.count())
-        def today = new Date()
-
         
-        if (!Contribution.findByRepository(repository) || lastRefresh?.dateCreated < today - 1) {
+        if (!Contribution.findByRepository(repository)) {
+            Refresh lastRefresh = Refresh.findByRepository(repository)
+            def today = new Date()
             
             if (lastRefresh?.dateCreated < today - 1) {
-                mongo.getDB("grails-contributors").dropDatabase()
-                mongo.getDB("grails-contributors")
-            } else {
+                log.info("Contributors refresh being executed")
+                
+                // Can't do this on Cloud Foundry, don't have permission
+                //mongo.getDB("grails-contributors").dropDatabase()
+                //mongo.getDB("grails-contributors")
+                
                 Contribution.findAllByRepository(repository).each { c ->
                     c.delete()
                 }
                 Commit.findAllByRepository(repository).each { c ->
                     c.delete()
                 }
-            }
+            
+                def refresh = new Refresh()
+                def start = System.currentTimeMillis()
 
-            log.info("Contributors refresh being executed")
-            def refresh = new Refresh()
-            def start = System.currentTimeMillis()
+                def config = ConfigurationHolder.config
+                String baseUrl = config.github.url
+                String apiCall = "repos/show/${repository}/contributors"
 
-            def config = ConfigurationHolder.config
-            String baseUrl = config.github.url
-            String coreApiCall = "repos/show/${repository}/contributors"
-
-            def coreUrl = new URL(baseUrl + coreApiCall)
-            def coreResult = new XmlParser().parseText(coreUrl.getText())
-            int rank = 1
-            coreResult.contributor.each {
-                def contributor = Contributor.findByLogin(it.login.text())
-                if (!contributor) {
-                    def name = it.name.text()
-                    if(name?.length() == 0) name = it.login.text()
-                    contributor = new Contributor(blog: it.blog.text(), company: it.company.text(), location:it.location.text(), name: name, login: it.login.text(), gravatarId: it."gravatar-id".text()) 
+                def url = new URL(baseUrl + apiCall)
+                def result = new XmlParser().parseText(url.getText())
+                int rank = 1
+                result.contributor.each {
+                    def contributor = Contributor.findByLogin(it.login.text())
+                    if (!contributor) {
+                        def name = it.name.text()
+                        if (name?.length() == 0) name = it.login.text()
+                        contributor = new Contributor(blog: it.blog.text(), company: it.company.text(), location:it.location.text(), name: name, login: it.login.text(), gravatarId: it."gravatar-id".text()) 
+                    }
+                    contributor.addToContributions(new Contribution(rank: rank++, total: Integer.parseInt(it.contributions.text()), repository: repository))
+                    contributor.save()
                 }
-                contributor.addToContributions(new Contribution(rank: rank++, total: Integer.parseInt(it.contributions.text()), repository: repository))
-                contributor.save()
-            }
 
-            def stop = System.currentTimeMillis()
-            refresh.executionTime = stop - start
-            refresh.save()
+                def stop = System.currentTimeMillis()
+                refresh.executionTime = stop - start
+                refresh.save()
+            }
         }
     }
 }

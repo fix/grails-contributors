@@ -19,4 +19,9 @@ package org.grails.contributors
 class Refresh {
     Date dateCreated
     Double executionTime
+    String repository
+    
+    static mapping = {
+        sort dateCreated: "desc"
+    }
 }
