@@ -83,6 +83,11 @@ class RefreshService {
     def contributors() {
         contributors("grails/grails-core")
         contributors("grails/grails-doc")
+        contributors("grails-plugins/grails-resources")
+        contributors("grails-plugins/grails-spring-security-core")
+        contributors("grails-plugins/grails-tomcat-plugin")
+        contributors("grails-plugins/grails-hibernate-plugin")
+        contributors("grails-plugins/grails-database-migration")
     }
 
     def contributors(String repository) {
