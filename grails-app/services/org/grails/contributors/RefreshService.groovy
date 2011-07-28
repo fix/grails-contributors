@@ -16,6 +16,8 @@
 
 package org.grails.contributors
 
+import java.text.SimpleDateFormat;
+
 import org.codehaus.groovy.grails.commons.*
 
 /**
@@ -42,7 +44,7 @@ class RefreshService {
             def commitsUrl = new URL(baseUrl + commitsCall)
 
             def commitsResult = new XmlParser().parseText(commitsUrl.getText())
-
+			def df=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
             commitsResult.commit.each {commit ->
                 // (felipe)
                 // IMPORTANT: Commit#commitId is constrained as unique. I'm not checking whether
@@ -69,11 +71,14 @@ class RefreshService {
                         }
                     }
                 }
+				def date=commit."committed-date".text()
+				date=date[0..21]+date[23..24]
                 Contributor.findByLogin(login).addToCommits(
                         new Commit(commitId: commit.id.text(),
                         url: commit.url.text(),
                         message: commit.message.text(),
-                        repository:repository
+                        repository:repository,
+						commitDate:df.parse(date)
                         )).save()
             }
         }
