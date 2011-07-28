@@ -109,10 +109,13 @@ class RefreshService {
                 //mongo.getDB("grails-contributors").dropDatabase()
                 //mongo.getDB("grails-contributors")
                 
-                Contribution.findAllByRepository(repository).each { c ->
+                //TODO this is hard refresh
+				//note that Contributors are never refreshed
+				//(so any change in blog etc... are never taken in account)
+				Contribution.list().each { c ->
                     c.delete()
                 }
-                Commit.findAllByRepository(repository).each { c ->
+                Commit.list().each { c ->
                     c.delete()
                 }
             
