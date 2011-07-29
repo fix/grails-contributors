@@ -31,12 +31,16 @@ class HomeController {
     }
 
     def repository = {
-        if(!params.name||!params.name.contains("grails")){
-            [:]
-        }
-        else{
-            refreshService.contributors(params.name)
-            [contributions:Contribution.findAllByRepository(params.name,[order:'asc', sort: 'rank'])]
-        }
+        // need to decide if we are going to implement dynamically adding repos, or just have them listed in Config.groovy like they are now long-term
+        
+        //if (!params.name || !params.name.contains("grails")) {
+        //    [:]
+        //} else {
+        //    refreshService.contributors(params.name)
+        //    [contributions:Contribution.findAllByRepository(params.name,[order:'asc', sort: 'rank'])]
+        //}
+        
+        refreshService.contributors(params.name)
+        [contributions:Contribution.findAllByRepository(params.name,[order:'asc', sort: 'rank'])]
     }
 }

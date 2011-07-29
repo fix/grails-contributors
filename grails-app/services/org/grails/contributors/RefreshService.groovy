@@ -35,7 +35,7 @@ class RefreshService {
         commits("grails/grails-doc")
     }
 
-    def commits(String repository){
+    def commits(String repository) {
         log.debug "ENTER RefreshService#commits"
 
         if (!Commit.findByRepository(repository)) {
@@ -44,8 +44,8 @@ class RefreshService {
             def commitsUrl = new URL(baseUrl + commitsCall)
 
             def commitsResult = new XmlParser().parseText(commitsUrl.getText())
-			def df=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
-            commitsResult.commit.each {commit ->
+            def df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+            commitsResult.commit.each { commit ->
                 // (felipe)
                 // IMPORTANT: Commit#commitId is constrained as unique. I'm not checking whether
                 // a given commit id is already present on DB. If a commit has already been
@@ -56,14 +56,14 @@ class RefreshService {
                 // being more "performatic".
 
                 def login = commit.committer.login?.text()
-                if (!login || login.size()==0) {
+                if (!login || login.size() == 0) {
                     //try to get by name
                     def test = Contributor.findByName(commit.committer.name?.text())
                     if (test) login = test.login
                     //try to guess login, based on graeme rocher case!
                     else {
-                        login=commit.committer.name?.text().toLowerCase().replace(" ", "")
-                        test=Contributor.findByLogin(login)
+                        login = commit.committer.name?.text().toLowerCase().replace(" ", "")
+                        test = Contributor.findByLogin(login)
                         if (test) {
                             //for next time store the name
                             test.name=commit.committer.name?.text()
@@ -71,14 +71,14 @@ class RefreshService {
                         }
                     }
                 }
-				def date=commit."committed-date".text()
-				date=date[0..21]+date[23..24]
+                def date = commit."committed-date".text()
+                date=date[0..21]+date[23..24]
                 Contributor.findByLogin(login).addToCommits(
                         new Commit(commitId: commit.id.text(),
                         url: commit.url.text(),
                         message: commit.message.text(),
                         repository:repository,
-						commitDate:df.parse(date)
+                        commitDate:df.parse(date)
                         )).save()
             }
         }
@@ -86,13 +86,10 @@ class RefreshService {
     }
 
     def contributors() {
-        contributors("grails/grails-core")
-        contributors("grails/grails-doc")
-        contributors("grails-plugins/grails-resources")
-        contributors("grails-plugins/grails-spring-security-core")
-        contributors("grails-plugins/grails-tomcat-plugin")
-        contributors("grails-plugins/grails-hibernate-plugin")
-        contributors("grails-plugins/grails-database-migration")
+        def config = ConfigurationHolder.config
+        def repositories = config.org.grails.contributors.repositories
+        
+        repositories.each { repo -> contributors(repo) }
     }
 
     def contributors(String repository) {
@@ -110,9 +107,9 @@ class RefreshService {
                 //mongo.getDB("grails-contributors")
                 
                 //TODO this is hard refresh
-				//note that Contributors are never refreshed
-				//(so any change in blog etc... are never taken in account)
-				Contribution.list().each { c ->
+                //note that Contributors are never refreshed
+                //(so any change in blog etc... are never taken in account)
+                Contribution.list().each { c ->
                     c.delete()
                 }
                 Commit.list().each { c ->
