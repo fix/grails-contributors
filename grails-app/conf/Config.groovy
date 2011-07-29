@@ -67,7 +67,7 @@ environments {
 
 // log4j configuration
 log4j = {
-    //info "grails.app"
+    info "grails.app"
     
     // Example of changing the log pattern for the default console
     // appender:
@@ -94,11 +94,11 @@ log4j = {
 github.url = 'http://github.com/api/v2/xml/'
 
 org.grails.contributors.repositories = [
-    "grails/grails-core",
-    "grails/grails-doc",
-    "grails-plugins/grails-resources",
-    "grails-plugins/grails-spring-security-core",
-    "grails-plugins/grails-tomcat-plugin",
-    "grails-plugins/grails-hibernate-plugin",
-    "grails-plugins/grails-database-migration"
+    'grails/grails-core',
+    'grails/grails-doc',
+    'grails-plugins/grails-resources',
+    'grails-plugins/grails-spring-security-core',
+    'grails-plugins/grails-tomcat-plugin',
+    'grails-plugins/grails-hibernate-plugin',
+    'grails-plugins/grails-database-migration'
 ]

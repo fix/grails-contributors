@@ -93,14 +93,14 @@ class RefreshService {
     }
 
     def contributors(String repository) {
-        log.info("Contributors refresh method called")
+        log.info("Contributors refresh called with $repository")
         
         if (!Contribution.findByRepository(repository)) {
             Refresh lastRefresh = Refresh.findByRepository(repository)
             def today = new Date()
             
             if (lastRefresh?.dateCreated < today - 1) {
-                log.info("Contributors refresh being executed")
+                log.info("Contributors refresh being executed for $repository")
                 
                 // Can't do this on Cloud Foundry, don't have permission
                 //mongo.getDB("grails-contributors").dropDatabase()
@@ -109,10 +109,12 @@ class RefreshService {
                 //TODO this is hard refresh
                 //note that Contributors are never refreshed
                 //(so any change in blog etc... are never taken in account)
-                Contribution.list().each { c ->
+                
+                Contribution.findAllByRepository(repository).each { c ->
                     c.delete()
                 }
-                Commit.list().each { c ->
+                
+                Commit.findAllByRepository(repository).each { c ->
                     c.delete()
                 }
             
