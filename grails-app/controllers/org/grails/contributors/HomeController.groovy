@@ -40,7 +40,8 @@ class HomeController {
         //    [contributions:Contribution.findAllByRepository(params.name,[order:'asc', sort: 'rank'])]
         //}
         
-        refreshService.contributors(params.name)
+        //refreshService.contributors(params.name)
+        
         [contributions:Contribution.findAllByRepository(params.name,[order:'asc', sort: 'rank'])]
     }
 }
