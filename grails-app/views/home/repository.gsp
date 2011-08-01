@@ -14,7 +14,8 @@
   </g:if>
   <g:else>
      <div>
-		<h1>${params.name} [<g:link action="commits" params="[repository:params.name]">Commits</g:link>]</h1>
+		<h1>${params.name.split("/")[1].toUpperCase()}</h1>
+		<h1><g:link action="commits" params="[repository:params.name]">Commits</g:link> | <a href="http://github.com/${params.name}">Source</a></h1>
 		<br/>
 		<table id="fullCol">
 			<tbody>
