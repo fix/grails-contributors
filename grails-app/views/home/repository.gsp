@@ -20,7 +20,7 @@
 		<table id="fullCol">
 			<tbody>
 				<g:each var="c" in="${contributions}">
-				<tr class="row${c.rank%2}"><td>#${c.rank}</td><td><a target="_blank" href="${createLink(controller: 'contributor', action:'show', params:[login:c.contributor?.login])}">${c.contributor?.name}</a></td><td> ${c.total}</td></tr>
+				<tr class="row${c.rank%2}"><td>#${c.rank}</td><td><a href="${createLink(controller: 'contributor', action:'show', params:[login:c.contributor?.login])}">${c.contributor?.name}</a></td><td> ${c.total}</td></tr>
 				</g:each>
 			</tbody>
 		</table>
