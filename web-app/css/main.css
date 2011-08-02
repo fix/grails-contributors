@@ -29,6 +29,10 @@ a {
 	text-decoration: none;
 }
 
+img {
+	border-radius: 5px;
+}
+
 #wrapper {
 	box-shadow: 20px 10px 10px #888;
 	opacity: 0.80;

@@ -44,4 +44,24 @@ class HomeController {
         
         [contributions:Contribution.findAllByRepository(params.name,[order:'asc', sort: 'rank'])]
     }
+	
+	def repositories = {
+		// almost no aggregation in mongodb, doing something like 
+		// "select sum(total), contributor from contributions groupby repository"
+		// manually
+		def contributions=[:]
+		Contribution.list().each{
+			if(contributions[it.repository]){
+				contributions[it.repository].total+=it.total
+			}
+			else{
+				contributions[it.repository]=[total:it.total]
+			}
+			if(it.rank==1){
+				contributions[it.repository].contributor=it.contributor
+				contributions[it.repository].max=it.total
+			}
+		}
+		[contributions:contributions]
+	}
 }
