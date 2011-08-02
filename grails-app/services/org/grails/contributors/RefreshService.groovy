@@ -110,17 +110,21 @@ class RefreshService {
                 //note that Contributors are never refreshed
                 //(so any change in blog etc... are never taken in account)
                 
-                //Contribution.findAllByRepository(repository).each { c ->
-                //    c.delete()
-                //}
+                Contribution.findAllByRepository(repository).each { c ->
+                    c.delete()
+                }
                 
-                Contribution.list().each { c -> c.delete() }
+                // This either needs to be moved outside the if statement or up to the other contributors method.
+                // It deletes all the data every time this method is called for each repo.
+                //Contribution.list().each { c -> c.delete() }
                 
-                //Commit.findAllByRepository(repository).each { c ->
-                //    c.delete()
-                //}
+                Commit.findAllByRepository(repository).each { c ->
+                    c.delete()
+                }
                 
-                Commit.list().each { c -> c.delete() }
+                // This either needs to be moved outside the if statement or up to the other contributors method.
+                // It deletes all the data every time this method is called for each repo.
+                //Commit.list().each { c -> c.delete() }
             
                 def refresh = new Refresh()
                 def start = System.currentTimeMillis()
